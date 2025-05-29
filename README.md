@@ -1,3 +1,7 @@
+<h1> Introduction </h1>
+This is the code for Time-Aware World Model, a model-agnostic and more efficient training method for world model. The model is built on top of TD-MPC2 world model architecture as the basis of the experiments.
+
+
 <h1> 1. Dependencies Installations </h1>
 
 1. Installation:<br>
