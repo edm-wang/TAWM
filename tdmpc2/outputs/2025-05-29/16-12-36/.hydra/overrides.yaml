@@ -1,0 +1,4 @@
+- task=stick-pull
+- multi_dt=true
+- steps=1500000
+- seed=3

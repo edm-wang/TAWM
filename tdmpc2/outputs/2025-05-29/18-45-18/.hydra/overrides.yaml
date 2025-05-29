@@ -1,0 +1,5 @@
+- task=pde-burgers
+- save_video=false
+- multi_dt=true
+- steps=1500000
+- seed=5

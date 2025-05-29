@@ -1,0 +1,6 @@
+apsertse.ckpt: mts3-mw-faucet-open-H50.ckpt
+k8ijwyaa.ckpt: mts3-mw-faucet-open-H3.ckpt
+
+q7my13ec.ckpt: mts3-mw-basketball-H50.ckpt
+0yqowzz1.ckpt: mts3-mw-basketball-H33.ckpt
+onh0kk86.ckpt: mts3-mw-basketball-H3.ckpt

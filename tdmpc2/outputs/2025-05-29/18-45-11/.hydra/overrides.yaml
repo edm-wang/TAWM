@@ -1,0 +1,5 @@
+- task=mw-box-close
+- checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/mw-box-close/multidt-log-uniform-euler/2/step_1450053.pt
+- dt_sampler=log-uniform
+- multi_dt=true
+- integrator=euler

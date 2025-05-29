@@ -1,0 +1,153 @@
+1. cd to train.py
+
+2. tmux:
+    1. tmux new -s assembly
+    2. tmux new -s basketball
+    3. tmux new -s bin-picking
+    4. tmux new -s box-close
+    5. tmux new -s faucet-open
+    6. tmux new -s hammer
+    7. tmux new -s lever-pull
+    8. tmux new -s pick-out-of-hole
+    9. tmux new -s soccer
+    10. tmux new -s sweep-into
+    11. tmux new -s window-close
+    12. tmux new -s handle-pull
+
+    TODO:
+        1. Euler mw-assembly
+        2. Euler mw-basketball
+        3. Euler mw-box-close
+        4. Euler mw-faucet-open
+        5. Euler mw-hammer
+        6. Euler mw-handle-pull
+        7. Euler mw-lever-pull
+        8. Euler mw-pick-out-of-hole
+        9. Euler mw-sweep-into
+        10. Euler pde-allen_cahn
+        11. Euler pde-burgers
+        12. Euler pde-wave
+
+3. srun:
+    1. srun --pty --mem=32gb --time=3-00:00:00 --gres=gpu:rtxa4000:1 bash
+        -> standard
+    1*. srun --pty --qos=huge-long --cpus-per-gpu=32 --mem=32gb --time=8-00:00:00 --gres=gpu:rtxa4000:1 bash
+        -> more cpu + more time
+    2. srun --pty --account=gamma --mem=32gb --partition=gamma --time=3-00:00:00 --gres=gpu:1 bash
+
+3*. sbatch (for gamma): 
+    1. sbatch sbatch_jobs/assembly_1.sh
+    2. sbatch sbatch_jobs/basketball_1.sh
+    3. sbatch sbatch_jobs/box_close_1.sh
+
+    check progression / logs:
+    1. tail -f slurm-1234567.out
+    -> replace 1234567 with JOBID
+    
+    cancel job:
+    1. scancel JOBID
+
+4. conda activate tdmpc2
+
+5. train:
+    # train multidt
+    1. python train.py task=mw-assembly multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    2. python train.py task=mw-basketball multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    3. python train.py task=mw-bin-picking multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    4. python train.py task=mw-box-close multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    5. python train.py task=mw-faucet-open multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    6. python train.py task=mw-hammer multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    7. python train.py task=mw-lever-pull multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    8. python train.py task=mw-pick-out-of-hole multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    9. python train.py task=mw-soccer multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    10. python train.py task=mw-sweep-into multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    11. python train.py task=mw-window-close multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 
+    12. python train.py task=mw-handle-pull multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+
+    # train dmcontrol - multidt
+    1. python train.py task=cartpole-balance multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    2. python train.py task=hopper-hop multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    3. python train.py task=humanoid-walk multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    4. python train.py task=walker-run multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    5. python train.py task=quadruped-walk multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+    6. python train.py task=cheetah-run multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
+
+    # train pygame - multidt
+    1. python train.py task=pygame-flappybird multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=600100 save_video=false seed=1
+
+    # train controlgym (pde control) - multidt
+    1.  python train.py task=pde-wave multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
+        python train.py task=pde-wave multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
+    2.  python train.py task=pde-burgers multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
+        python train.py task=pde-burgers multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
+
+    # train f1tenth (f1 racing) - multidt
+    1.  python train.py task=f1-aut multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
+        python train.py task=f1-aut multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
+    2.  python train.py task=f1-esp multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
+        python train.py task=f1-esp multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
+
+    # train multidt on dt ~ Uniform(min_dt, max_dt)
+    1. python train.py task=mw-assembly multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints dt_sampler=uniform steps=1500000 seed=1
+    2. python train.py task=mw-basketball multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints dt_sampler=uniform steps=1500000 seed=1
+    3. python train.py task=mw-box-close multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints dt_sampler=uniform steps=1500000 seed=1
+
+    # train singledt on some fixed dt (change `default_dt`)
+    1. python train.py task=mw-assembly multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
+    2. python train.py task=mw-box-close multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
+    3. python train.py task=mw-basketball multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
+    4. python train.py task=highway-v0 multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
+    5. python train.py task=intersection-v0 multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
+
+    # after training (to save space)
+    rm -r logs/*/*/default/wandb
+
+6. tmux detach & attach
+    detach: Ctrl+b; then d
+    attach: tmux attach -t <tmux-name> 
+
+    tmux list-sessions
+
+7. evaluation
+    # Performance vs Eval dt: Evaluate a particular model (timeaware or baseline) on all tasks on different evaluation dt's
+    python eval_model_multidt.py task=mw-assembly multitask=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/mw-assembly/multidt/1/step_1500000.pt multi_dt=true seed=1
+    python eval_model_multidt.py task=mw-assembly multitask=false checkpoint=~/world_model_diff_envs/tdmpc2/tdmpc2/baseline/mw-assembly-3.pt multi_dt=false seed=3
+
+    # Performance vs Eval dt: Evaluate ALL models (baseline and timeaware) on all tasks on different evaluation dt's
+    python eval_model_multidt_all.py
+
+    # Performance vs Learning Step: Evaluate ALL models (baseline and timeaware) at different intermediate steps on all tasks different evaluation dt's
+    python eval_model_learning_curve.py
+    
+
+
+
+
+(MTS3 baseline) convert existing mt9 data to train mts3
+-----------------------------------------------------------------------------------------------------------------------
+data = torch.load('mt9_singledt_40k/offline-data-mw-basketball.pt')
+data_obs = data['obs']
+data_act = data['action']
+
+train_obs, test_obs = data_obs[[i for i in range(40000) if i%4!=3]], data_obs[[i for i in range(40000) if i%4==3]]
+train_act, test_act = data_act[[i for i in range(40000) if i%4!=3]], data_act[[i for i in range(40000) if i%4==3]]
+train_targets, test_targets = train_obs[:,2:,:], test_obs[:,2:,:]
+train_obs, test_obs = train_obs[:,1:-1,:], test_obs[:,1:-1,:]
+train_act, test_act = train_act[:, 1:-1,:], test_act[:,1:-1,:]
+assert (train_obs[:,1:,:] == train_targets[:,:-1,:]).all()
+assert (test_obs[:,1:,:] == test_targets[:,:-1,:]).all()
+print(train_obs.shape, train_act.shape, train_targets.shape, test_obs.shape, test_act.shape, test_targets.shape)
+
+data_dict = {}
+data_dict['train_obs'] = train_obs[::2]
+data_dict['train_act'] = train_act[::2]
+data_dict['train_targets'] = train_targets[::2]
+data_dict['test_obs'] = test_obs[::2]
+data_dict['test_act'] = test_act[::2]
+data_dict['test_targets'] = test_targets[::2]
+assert (data_dict['train_obs'][:,1:,:] == data_dict['train_targets'][:,:-1,:]).all()
+assert (data_dict['test_obs'][:,1:,:] == data_dict['test_targets'][:,:-1,:]).all()
+
+data_dict['normalizer'] = {'observations': [train_obs.mean(dim=[0,1]), train_obs.std(dim=[0,1])], 'actions': [train_act.mean(dim=[0,1]), train_act.std(dim=[0,1])], 'diff': [(train_targets-train_obs).mean(dim=[0,1]), (train_targets-train_obs).std(dim=[0,1])], 'targets': [train_targets.mean(dim=[0,1]), train_targets.std(dim=[0,1])] }
+with open('mts3-data-mw-basketball.pkl', 'wb') as file:
+    pickle.dump(data_dict, file)

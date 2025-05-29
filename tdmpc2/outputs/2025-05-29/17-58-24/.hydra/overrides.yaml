@@ -1,0 +1,5 @@
+- task=mw-assembly
+- multitask=false
+- checkpoint=/fs/nexus-scratch/anhu/tawm/tdmpc2/checkpoints/baseline/mw-assembly-1.pt
+- multi_dt=false
+- seed=1

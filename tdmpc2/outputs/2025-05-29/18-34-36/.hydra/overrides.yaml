@@ -1,0 +1,5 @@
+- task=mw-basketball
+- checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/mw-basketball/multidt-log-uniform-euler/3/step_0.pt
+- dt_sampler=log-uniform
+- multi_dt=true
+- integrator=euler
