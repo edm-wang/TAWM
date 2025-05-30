@@ -1,8 +1,8 @@
-/tdmpc2/logs/*/*/default
+/tawm/logs/*/*/default
 *.pickle
 *.pkl
 /outputs/
-/tdmpc2/outputs/
+/tawm/outputs/
 /MTS3/experiments/mobileRobot/conf/data/
 /MTS3/experiments/frankaKitchen/conf/data/
 /MTS3/sweep_dir/
