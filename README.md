@@ -5,7 +5,7 @@ Since TAWM's core contribution is the time-aware training method, which is archi
 
 To incorporate TAWM into a world model architecture, you can simply:
 1) Modify the dynamics / temporal state space model condition on time step $\Delta t$ <br>
-   E.g. Euler dynamic model: $z_{t+\Delta t} = z_t + d_{\theta}(z_t, a_t, \Delta t) \cdot \tau(\Delta t)$
+   E.g. $z_{t+\Delta t} = z_t + d_{\theta}(z_t, a_t, \Delta t) \cdot \tau(\Delta t)$ (Euler dynamic model)
 2) Use mixture of time step size during training: <br>
    $\Delta t$ ~ Log-Uniform($\Delta t_{min}, \Delta t_{max}$) (or Uniform)
 
