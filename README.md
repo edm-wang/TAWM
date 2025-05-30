@@ -101,12 +101,12 @@ The evaluation code evalutate the performance of the world model on specified ta
 1. `eval_model_multidt.py`: test model performance on `task` on various inference-time observation rates <br>
    ```sh
    # test TAWM (Euler + Log-Uniform) on `mw-basketball`
-   python eval_model_multidt.py task=mw-basketball checkpoint={model_path} dt_sampler=log-uniform multi_dt=true integrator=euler
+   python eval_model_multidt.py task=mw-basketball checkpoint={model_path} seed={seed} dt_sampler=log-uniform multi_dt=true integrator=euler
    ```
 
    ```sh
    # test non-time-aware baseline on `mw-basketball`
-   python eval_model_multidt.py task=mw-basketball checkpoint={model_path} multi_dt=false eval_steps_adjusted=true
+   python eval_model_multidt.py task=mw-basketball checkpoint={model_path} seed={seed} multi_dt=false eval_steps_adjusted=true
    ```
 2. `eval_model_multidt_all`: comprehensively test all model performance across all tasks on various inference-time observation rates <br>
    * Models: <br>
