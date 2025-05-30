@@ -116,10 +116,10 @@ The evaluation code evalutate the performance of the world model on specified ta
       (2b) TAWM (Euler + Log-Uniform Sampling) <br>
    * Use `eval_model_multidt.py`
 
-3. `eval_model_learning_curve`: Evaluate intermediate models and save learning curves on each task across different seeds
+3. `eval_model_learning_curve`: Evaluate intermediate models and save learning curves on each task across seeds
    * **NOTE: You need to have model saved at each step for this evaluation**
 <br>
----
+
 <h2> 3b. Evaluation Results </h2>
 
 The evaluation results are saved in `tdmpc2/logs/<task>/<eval-type>.csv`.
