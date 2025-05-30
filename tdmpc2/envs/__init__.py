@@ -64,36 +64,3 @@ def make_env(cfg):
     cfg.episode_length = env.max_episode_steps
     cfg.seed_steps = max(1000, 5*cfg.episode_length)
     return env
-
-""" 
-    Re-implementation from tdmpc2's make_env()
-    -> Initialize DiffRL differentiable env
-"""
-def make_diff_env(cfg):
-    """ Make DiffRL environment """
-    gym.logger.set_level(40)
-
-    """ Unimplemented Multi-task NVIDIA's Differentiable Environment"""
-    if cfg.multitask:
-        # env = make_multitask_env(cfg)
-        raise NotImplementedError("")
-
-    else:
-        """ 
-            ADD Important args to cfg file for DiffRL env
-                1. cfg.num_envs: #envs initialized for parallel training
-                2. cfg.render: whether to render the simulation
-                3. cfg.no_grad: whether to use the adjoint tracking (use the "differentiable" part)
-                                   default: False -> disable tracking
-        """
-        env = None
-
-    try: # Dict
-        cfg.obs_shape = {k: v.shape for k, v in env.observation_space.spaces.items()}
-    except: # Box
-        cfg.obs_shape = {cfg.get('obs', 'state'): env.observation_space.shape}
-        
-    cfg.action_dim = env.action_space.shape[0]
-    cfg.episode_length = env.episode_length # env.max_episode_steps
-    cfg.seed_steps = max(1000, 5*cfg.episode_length)
-    return env
