@@ -1,0 +1,3 @@
+step,episode_reward,episode_success,train_success_ratio
+0.0,1.882802963256836,0.0,0.0
+50094.0,603.7190551757812,0.3,0.0583

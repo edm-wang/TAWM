@@ -1,0 +1,3 @@
+- task=mw-assembly
+- checkpoint=/fs/nexus-scratch/anhu/tawm/tawm/checkpoints/baseline/mw-assembly-1.pt
+- multi_dt=false
