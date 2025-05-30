@@ -1,5 +1,5 @@
 <h1> Introduction </h1>
-This is the code for Time-Aware World Model (TAWM), a model-agnostic and more efficient training method for world model. In this work, TAWM is built on top of TD-MPC2 world model architecture as the basis of the experiments.
+This is the code for Time-Aware World Model (TAWM), a model-agnostic and more efficient training method for world model. In this work, TAWM is built on top of TD-MPC2 world model architecture as the basis of the experiments. <br><br>
 
 Since TAWM's core contribution is the time-aware training method, which is architecture-agnostic, it can be incorporated into any world model training pipeline, including but is not limited to TD-MPC2 and Dreamers.
 
@@ -117,7 +117,7 @@ The evaluation code evalutate the performance of the world model on specified ta
    * Use `eval_model_multidt.py`
 
 3. `eval_model_learning_curve`: Evaluate intermediate models and save learning curves on each task across seeds
-   * **NOTE: You need to have model saved at each step for this evaluation**
+   * **NOTE: You need to have model saved at each step for this evaluation.** By default, a model checkpoint is saved every 50,000 steps.
 <br>
 
 <h2> 3b. Evaluation Results </h2>
