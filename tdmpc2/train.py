@@ -12,7 +12,7 @@ from termcolor import colored # type: ignore
 from common.parser import parse_cfg
 from common.seed import set_seed
 from common.buffer import Buffer
-from envs import make_env, make_diff_env
+from envs import make_env
 from tdmpc2 import TDMPC2
 from trainer.offline_trainer import OfflineTrainer
 from trainer.online_trainer import OnlineTrainer
