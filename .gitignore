@@ -3,7 +3,7 @@
 /experiments/frankaKitchen/conf/data/
 /sweep_dir/
 /experiments/hydraulics/
-# /tdmpc2/logs/*/*/default
+/tdmpc2/logs/*/*/default
 *.pickle
 *.pkl
 /outputs/
