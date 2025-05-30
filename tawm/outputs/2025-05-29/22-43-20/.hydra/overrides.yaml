@@ -1,5 +1,0 @@
-- task=mw-assembly
-- checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/mw-assembly/multidt-log-uniform-euler/1/step_1450053.pt
-- dt_sampler=log-uniform
-- multi_dt=true
-- integrator=euler

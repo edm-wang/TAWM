@@ -1,3 +1,0 @@
-- task=pde-allen_cahn
-- checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/pde-allen_cahn/singledt-0.01/1/step_950096.pt
-- multi_dt=false
