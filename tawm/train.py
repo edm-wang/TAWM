@@ -58,25 +58,9 @@ def train(cfg: dict):
             if cfg.task[:2] == 'mw':
                 print('Using Meta-World Environment')
                 cfg.default_dt = env.env.env.sim.model.opt.timestep
-            elif cfg.task in TASK_SET['highway']:
-                print('Using Highway-env Environment')
-                f_control = env.env.env.env.env.config['policy_frequency']
-                cfg.default_dt = round(1/f_control, 4)
-            elif cfg.task[:7] == 'sustain':
-                print('Using SustainGym Environment')
-                cfg.default_dt = round(env.get_sim_dt(), 2)
-            elif cfg.task[:6] == 'pygame':
-                print('Using PyGames Environment')
-                cfg.default_dt = round(env.get_sim_dt(), 4)
             elif cfg.task[:3] == 'pde':
                 print('Using ControlGym Environment')
                 cfg.default_dt = round(env.get_sim_dt(), 4)
-            elif cfg.task[:2] == 'f1':
-                print('Using F1Tenth Racing Environment')
-                cfg.default_dt = round(env.default_dt, 4)
-            elif cfg.task in TASK_SET['dmcontrol']:
-                print('Using DMControl Environment')
-                cfg.default_dt = env.env.env.physics.model.opt.timestep
             else:
                 raise NotImplementedError(f'{cfg.task} is not implemented!')
 
@@ -85,16 +69,9 @@ def train(cfg: dict):
             # print(colored('SIMULATION TIMESTEP:', 'green', attrs=['bold']), f'Uniform([0.001, {round(max(0.01, min(0.1, cfg.default_dt*2)), 4)}])') # 0.01 <= Max dt <= 0.1
             if cfg.task[:2] == 'mw':
                 print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([0.001, 0.05] sec)') # Max dt = max(0.05, 2 * default_dt)
-            elif cfg.task[:7] == 'sustain':
-                print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([1, 50] minutes)') # Max dt = 50 minutes
-            elif cfg.task[:6] == 'pygame':
-                print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([0.01, 0.2] sec)') # Max dt = 0.2 sec
             elif cfg.task[:3] == 'pde':
                 max_dt = 1.0
                 print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([0.01, {max_dt}] sec)') # Max dt = 1.0 sec
-            elif cfg.task[:2] == 'f1':
-                max_dt = 0.5
-                print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([0.01, {max_dt}] sec)')
             else:
                 raise NotImplementedError
 
@@ -104,21 +81,8 @@ def train(cfg: dict):
     else:
         print(colored(f'TIMESTEP-AWARE for {cfg.task}', 'green', attrs=['bold']))
 
-    if cfg.task in TASK_SET['highway']: 
-        cfg.episode_length = 500 # done=True when reached env.config["duration"] anyway
-    elif cfg.task[:7] == 'sustain':
-        cfg.episode_length = env.max_timestep
-    elif cfg.task[:2] == 'f1':
-        # f1 racing envs: ended by collision, lap completion, or time up
-        cfg.episode_length = 99999
-    else: 
-        cfg.episode_length = env.max_episode_steps
-
-    if cfg.task[:2] == 'f1':
-        # pretraining on 50,000 steps for f1tenth racing envs
-        cfg.seed_steps = 10000
-    else:
-        cfg.seed_steps = max(1000, 5*cfg.episode_length)
+    cfg.episode_length = env.max_episode_steps
+    cfg.seed_steps = max(1000, 5*cfg.episode_length)
     print(colored('Pretraining steps :', 'blue'), cfg.seed_steps)
     
     
