@@ -61,6 +61,7 @@ def eval(cfg: dict):
     else:
         print(colored('Adjusted Step:', 'green', attrs=['bold']), cfg.eval_steps_adjusted)
     print(colored('Planning Horizon:', 'green', attrs=['bold']), cfg.horizon)
+    
     # env parameters
     global env
     env = make_env(cfg)
@@ -74,12 +75,7 @@ def eval(cfg: dict):
     print(colored(f'Default dt = {cfg.default_dt}', 'green'))
 
     """ Set episode lengths (total step(action, dt) steps)"""
-    if cfg.task in TASK_SET['highway']: 
-        cfg.episode_length = 500 # done=True when reached env.config["duration"] anyway
-    elif cfg.task[:7] == 'sustain':
-        cfg.episode_length = env.max_timestep
-    else: 
-        cfg.episode_length = env.max_episode_steps
+    cfg.episode_length = env.max_episode_steps
 
     """ initialize model architectures"""
     tdmpc2 = TDMPC2(cfg)
@@ -102,9 +98,11 @@ def eval(cfg: dict):
     if cfg.task[:3] == 'pde':
         # ControlGym PDE envs
         eval_dts = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 0.75, 1.0]
-    else: 
+    elif cfg.task[:2] == 'mw': 
         # Meta-World
         eval_dts = [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05]
+    else:
+        raise NotImplementedError
 
     """===========================================
             EVALUATION ON DIFFERENT Δt's
@@ -147,7 +145,7 @@ def eval(cfg: dict):
                 inference_times[dt].append(end-start)
                 # """ 2. step to next physics state in simulation"""
                 # obs, reward, done, info = env.step(action)
-                obs, reward, done, info = env_step_adaptive_dt(action, dt, cfg)
+                obs, reward, done, info = env.step_adaptive_dt(action, dt)
                 ep_reward += reward
                 done = (t >= cfg.episode_length-1) or done
                 # print(t, reward, done)
@@ -194,51 +192,6 @@ def eval(cfg: dict):
     # Save evals 
     df_eval = pd.DataFrame(rows)
     df_eval.to_csv(f'{cwd}/logs/{cfg.task}/{save_file}', index=False)
-
-
-def set_env_timestep(dt, cfg):
-    if (dt is not None): #  and (self.env.env.env.physics.model.opt.timestep != dt)
-        """ (1) set simulation timestep """
-        # Meta-World envs
-        if cfg.task[:2] == 'mw': 
-            env.obs_dt = dt
-        # ControlGym PDE envs
-        elif cfg.task[:3] == 'pde':
-            env.set_sim_dt(dt)
-        else:
-            raise NotImplementedError
-
-def get_env_timestep(cfg):
-    # Meta-World envs
-    if cfg.task[:2] == 'mw': 
-        return env.obs_dt
-    # PDE ControlGym
-    elif cfg.task[:3] == 'pde':
-        return env.get_sim_dt()
-    else:
-        raise NotImplementedError
-
-""" method for step env with non-default timestep
-    case 1: dt <= default_dt: 
-        (1) set env.timestep to dt; 
-        (2) then env.step()
-    case 2: dt > default_dt : 
-        (1) segment dt = dt0 + N*default_dt; 
-        (2) env.step() with dt0; 
-        (3) env.step() with dt for N times
-"""
-def env_step_adaptive_dt(action, dt, cfg):
-    # Meta-World envs:
-    if cfg.task[:2] == 'mw':
-        """ Use defined adaptive timestepping wrapper """
-        return env.step_adaptive_dt(action, dt)
-    # SustainGym & PyGame & PDE ControlGym envs
-    elif cfg.task[:3] == 'pde':
-        """ Use defined adaptive timestepping
-            Mechanism: since it is linear, simply: 
-                set_sim_dt(dt) -> normal step(action)
-        """
-        return env.step_adaptive_dt(action, dt)
 
 if __name__ == '__main__':
     start = datetime.now()
