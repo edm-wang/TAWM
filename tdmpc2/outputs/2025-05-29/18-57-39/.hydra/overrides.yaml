@@ -1,3 +1,0 @@
-- task=pde-burgers
-- checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/pde-burgers/singledt-0.05/1/step_750031.pt
-- multi_dt=false

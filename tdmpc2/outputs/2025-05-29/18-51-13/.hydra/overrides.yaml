@@ -1,5 +1,0 @@
-- task=pde-burgers
-- checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints/pde-burgers/multidt-log-uniform-euler/1/step_700067.pt
-- dt_sampler=log-uniform
-- multi_dt=true
-- integrator=euler
