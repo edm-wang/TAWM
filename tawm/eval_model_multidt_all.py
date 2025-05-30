@@ -35,10 +35,8 @@ if __name__ == '__main__':
     # tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close', 'mw-faucet-open', 'mw-hammer', 'mw-handle-pull']
     # tasks = ['mw-assembly']
     # tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close']
-    # tasks = ['mw-hammer', 'mw-lever-pull']
-    # tasks = ['mw-hammer']
+    # tasks = ['mw-lever-pull', 'mw-pick-out-of-hole', 'mw-sweep-into']
     # tasks = ['mw-stick-pull']
-    # tasks = ['pygame-flappybird']
     # tasks = ['pde-burgers']
     # tasks = ['pde-allen_cahn', 'pde-wave']
     
@@ -69,9 +67,9 @@ if __name__ == '__main__':
             if os.path.exists(model_path):
                 """ 1(a) single-step prediction"""
                 print(f'Model Path: {model_path}')
-                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} multi_dt=false')
+                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} multi_dt=false')
                 """ 1(b) adjusted-step prediction"""
-                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} multi_dt=false eval_steps_adjusted=true')
+                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} multi_dt=false eval_steps_adjusted=true')
             print()
 
             """ ==============================================================
@@ -87,7 +85,7 @@ if __name__ == '__main__':
                         last_ckpt = get_last_checkpoint(model_path, max_epoch=800000)
                     else:
                         last_ckpt = get_last_checkpoint(model_path)
-                    os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path}/step_{last_ckpt}.pt multi_dt=false train_dt={dt}')
+                    os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path}/step_{last_ckpt}.pt seed={seed} multi_dt=false train_dt={dt}')
             print()
                 
             
@@ -103,7 +101,7 @@ if __name__ == '__main__':
                 last_ckpt = get_last_checkpoint(model_path)
                 model_path = f'{model_path}/step_{last_ckpt}.pt'
                 print(f'Model Path: {model_path}')
-                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} multi_dt=true')
+                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} multi_dt=true')
             print()
 
             """ ==============================================================
@@ -116,8 +114,8 @@ if __name__ == '__main__':
                 last_ckpt = get_last_checkpoint(model_path)
                 model_path = f'{model_path}/step_{last_ckpt}.pt'
                 print(f'Model Path: {model_path}')
-                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} dt_sampler=log-uniform multi_dt=true integrator=euler')
+                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} dt_sampler=log-uniform multi_dt=true integrator=euler')
             print()
             
         # for seed in [0,1,2]:
-        #     os.system(f'python eval_model_multidt.py task=mw-sweep-into checkpoint=mw_sweep_into_multidt_seed{seed}.pt multi_dt=true')
+        #     os.system(f'python eval_model_multidt.py task=mw-sweep-into checkpoint=mw_sweep_into_multidt_seed{seed}.pt seed={seed} multi_dt=true')
