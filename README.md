@@ -65,9 +65,9 @@ Since TAWM's core contribution is the time-aware training method, which is archi
    ```sh
    cd tdmpc2
    # baseline: meta-world environments
-   python train.py task=mw-basketball multi_dt=false steps=1500000 seed=3
+   python train.py task=mw-basketball multi_dt=false steps=2000000 seed=3
    # baseline: pde-control environments: no rendering/video
-   python train.py task=pde-burgers save_video=false multi_dt=false steps=1500000 seed=5
+   python train.py task=pde-burgers save_video=false multi_dt=false steps=2000000 seed=5
    ```
 
    Every 50,000 steps, the model checkpoints are saved in `<cfg.checkpoint>/<task>/<model_type>-<dt_sampler>-<integrator>/<seed>`, where:
