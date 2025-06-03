@@ -30,15 +30,11 @@ def get_last_checkpoint(model_path, max_epoch=99999999):
 
 if __name__ == '__main__':
     """ Comment out task set not being evaluated """
-    tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close', 'mw-faucet-open', 'mw-hammer', 
-             'mw-handle-pull', 'mw-lever-pull', 'mw-pick-out-of-hole', 'mw-sweep-into']
-    # tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close', 'mw-faucet-open', 'mw-hammer', 'mw-handle-pull']
-    # tasks = ['mw-assembly']
-    # tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close']
-    # tasks = ['mw-lever-pull', 'mw-pick-out-of-hole', 'mw-sweep-into']
-    # tasks = ['mw-stick-pull']
-    # tasks = ['pde-burgers']
-    # tasks = ['pde-allen_cahn', 'pde-wave']
+    tasks = [
+        'mw-assembly', 'mw-basketball', 'mw-box-close', 'mw-faucet-open', 'mw-hammer', 
+        'mw-handle-pull', 'mw-lever-pull', 'mw-pick-out-of-hole', 'mw-sweep-into',
+        'pde-allen_cahn', 'pde-burgers', 'pde-wave'
+    ]
     
     for task in tasks:
         for seed in [1,2,3]:
@@ -56,9 +52,9 @@ if __name__ == '__main__':
                 # other envs: trained baseline
                 default_dt = task_default_dt[task]
                 model_path = f'/fs/nexus-scratch/anhu/world-model-checkpoints/{task}/singledt-{default_dt}/{seed}'
-                # time-aware model for pde-burgers was only trained till 800k steps
+                # time-aware model for pde-burgers was only trained till 750k steps
                 if task == 'pde-burgers':
-                    last_ckpt = get_last_checkpoint(model_path, max_epoch=800000)
+                    last_ckpt = get_last_checkpoint(model_path, max_epoch=751000)
                 else:
                     last_ckpt = get_last_checkpoint(model_path)
                 model_path = f'{model_path}/step_{last_ckpt}.pt'
@@ -76,16 +72,16 @@ if __name__ == '__main__':
                 (1B) Evaluate non-time-aware model trained on various non-default dt's 
                     => not all tasks have model for this ablation study
             ============================================================== """
-            for dt in [0.001, 0.01, 0.05]:
+            for train_dt in [0.001, 0.01, 0.05]:
                 """ Collect baseline results on different fixed dt """
-                print(f'Baseline model (training dt = {dt})')
-                model_path = f'/fs/nexus-scratch/anhu/world-model-checkpoints/{task}/singledt-{dt}/{seed}'
+                print(f'Baseline model (training dt = {train_dt})')
+                model_path = f'/fs/nexus-scratch/anhu/world-model-checkpoints/{task}/singledt-{train_dt}/{seed}'
                 if os.path.exists(model_path):
                     if task == 'pde-burgers':
-                        last_ckpt = get_last_checkpoint(model_path, max_epoch=800000)
+                        last_ckpt = get_last_checkpoint(model_path, max_epoch=751000)
                     else:
                         last_ckpt = get_last_checkpoint(model_path)
-                    os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path}/step_{last_ckpt}.pt seed={seed} multi_dt=false train_dt={dt}')
+                    os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path}/step_{last_ckpt}.pt seed={seed} multi_dt=false train_dt={train_dt}')
             print()
                 
             
@@ -99,9 +95,16 @@ if __name__ == '__main__':
             # model_path = f'/fs/nexus-scratch/anhu/world-model-checkpoints/{task}/multidt/{seed}'
             if os.path.exists(model_path):
                 last_ckpt = get_last_checkpoint(model_path)
+                if task == 'pde-burgers':
+                    last_ckpt = get_last_checkpoint(model_path, max_epoch=751000) # pde-burgers: 750k steps
+                elif task[:3] == 'pde':
+                    last_ckpt = get_last_checkpoint(model_path, max_epoch=1010000) # other pde: 1M steps
+                else:
+                    last_ckpt = get_last_checkpoint(model_path)
+
                 model_path = f'{model_path}/step_{last_ckpt}.pt'
                 print(f'Model Path: {model_path}')
-                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} multi_dt=true')
+                os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} multi_dt=true integrator=rk4')
             print()
 
             """ ==============================================================
@@ -112,10 +115,14 @@ if __name__ == '__main__':
             model_path = f'/fs/nexus-scratch/anhu/world-model-checkpoints/{task}/multidt-log-uniform-euler/{seed}'
             if os.path.exists(model_path):
                 last_ckpt = get_last_checkpoint(model_path)
+                if task == 'pde-burgers':
+                    last_ckpt = get_last_checkpoint(model_path, max_epoch=751000) # pde-burgers: 750k steps
+                elif task[:3] == 'pde':
+                    last_ckpt = get_last_checkpoint(model_path, max_epoch=1010000) # other pde: 1M steps
+                else:
+                    last_ckpt = get_last_checkpoint(model_path)
+
                 model_path = f'{model_path}/step_{last_ckpt}.pt'
                 print(f'Model Path: {model_path}')
                 os.system(f'python eval_model_multidt.py task={task} checkpoint={model_path} seed={seed} dt_sampler=log-uniform multi_dt=true integrator=euler')
             print()
-            
-        # for seed in [0,1,2]:
-        #     os.system(f'python eval_model_multidt.py task=mw-sweep-into checkpoint=mw_sweep_into_multidt_seed{seed}.pt seed={seed} multi_dt=true')
