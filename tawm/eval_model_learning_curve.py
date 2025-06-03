@@ -221,11 +221,6 @@ def eval_intermediate_step_model(agent, step, cfg):
             'avg_model_exec_time': np.array(inference_time).mean(),
             'seed': cfg.seed
         }
-    
-    # * POST-PROCESSING eval metrics for some envs
-    if cfg.task == 'pygame-flappybird':
-        # flappy bird: measure in # holes passed => offset terminating reward of -5
-        row['episode_reward'] = row['episode_reward'] + 5
         
     return row
 
@@ -338,9 +333,6 @@ if __name__ == '__main__':
 
     # tasks = ['mw-sweep-into']
     # eval_dts = [0.001, 0.01, 0.02, 0.03, 0.05]
-
-    # tasks = ['pygame-flappybird']
-    # eval_dts = [0.01, 0.0333, 0.05, 0.1, 0.2]
 
     
     # tasks = ['pde-burgers', 'pde-wave']

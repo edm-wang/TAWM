@@ -64,28 +64,11 @@
     11. python train.py task=mw-window-close multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 
     12. python train.py task=mw-handle-pull multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
 
-    # train dmcontrol - multidt
-    1. python train.py task=cartpole-balance multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
-    2. python train.py task=hopper-hop multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
-    3. python train.py task=humanoid-walk multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
-    4. python train.py task=walker-run multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
-    5. python train.py task=quadruped-walk multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
-    6. python train.py task=cheetah-run multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1
-
-    # train pygame - multidt
-    1. python train.py task=pygame-flappybird multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=600100 save_video=false seed=1
-
     # train controlgym (pde control) - multidt
     1.  python train.py task=pde-wave multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
         python train.py task=pde-wave multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
     2.  python train.py task=pde-burgers multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
         python train.py task=pde-burgers multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=2
-
-    # train f1tenth (f1 racing) - multidt
-    1.  python train.py task=f1-aut multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
-        python train.py task=f1-aut multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
-    2.  python train.py task=f1-esp multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
-        python train.py task=f1-esp multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=5000000 eval_freq=100000 save_video=false seed=2
 
     # train multidt on dt ~ Uniform(min_dt, max_dt)
     1. python train.py task=mw-assembly multi_dt=true checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints dt_sampler=uniform steps=1500000 seed=1
@@ -96,9 +79,7 @@
     1. python train.py task=mw-assembly multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
     2. python train.py task=mw-box-close multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
     3. python train.py task=mw-basketball multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
-    4. python train.py task=highway-v0 multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
-    5. python train.py task=intersection-v0 multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500000 seed=1 default_dt=0.001
-
+    
     # after training (to save space)
     rm -r logs/*/*/default/wandb
 

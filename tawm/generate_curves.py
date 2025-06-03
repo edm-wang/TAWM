@@ -24,9 +24,9 @@ model_dir = '/fs/nexus-scratch/anhu/world-model-checkpoints'
 logdir_base = f'{cwd}/../results'
 logdir_tawm = f'{cwd}/logs'
 
-# tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close', 
-#          'mw-faucet-open', 'mw-hammer', 'mw-handle-pull',  
-#          'mw-lever-pull', 'mw-pick-out-of-hole', 'mw-sweep-into']
+tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close', 
+         'mw-faucet-open', 'mw-hammer', 'mw-handle-pull',  
+         'mw-lever-pull', 'mw-pick-out-of-hole', 'mw-sweep-into']
 # tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close', 
 #          'mw-faucet-open', 'mw-hammer', 'mw-handle-pull']
 # tasks = ['mw-assembly', 'mw-basketball', 'mw-box-close']
@@ -34,17 +34,15 @@ logdir_tawm = f'{cwd}/logs'
 # tasks = ['mw-faucet-open', 'mw-hammer', 'mw-lever-pull']
 # tasks = ['mw-faucet-open']
 # tasks = ['mw-basketball']
-# eval_dts = [0.001, 0.0025, 0.01, 0.02, 0.03, 0.05]
+eval_dts = [0.001, 0.0025, 0.01, 0.02, 0.03, 0.05]
 
 # tasks = ['mw-assembly']
+# tasks = ['mw-basketball']
 # eval_dts = [0.0025]
 
-# tasks = ['pygame-flappybird']
-# eval_dts = [0.01, 0.0333, 0.05, 0.1, 0.2]
-
-tasks = ['pde-allen_cahn', 'pde-burgers', 'pde-wave']
-# tasks = ['pde-allen_cahn']
-eval_dts = [0.01, 0.05, 0.1, 0.2, 0.5, 1.0]
+# tasks = ['pde-allen_cahn', 'pde-burgers', 'pde-wave']
+# # tasks = ['pde-allen_cahn']
+# eval_dts = [0.01, 0.05, 0.1, 0.2, 0.5, 1.0]
 
 """ ==================================================
     PLOT REWARD CURVE FOR ALL TASKS FOR EACH eval_dt (simulation timestep)
@@ -287,10 +285,6 @@ def plot_time_performance(cfg: dict):
         env = make_env(cfg)
         if task[:2] == 'mw':
             default_dt = env.env.env.sim.model.opt.timestep
-        elif task in TASK_SET['dmcontrol']:
-            default_dt = env.env.env.physics.model.opt.timestep
-        elif task[:6] == 'pygame':
-            default_dt = env.default_dt
         elif task[:3] == 'pde':
             default_dt = env.default_dt
         else:
@@ -374,11 +368,6 @@ def plot_time_performance(cfg: dict):
                 # 2. plot eval results for current task
                 # Group by 'timestep' and calculate the mean and standard deviation of rewards
                 metric = 'Success' if task[:2] == 'mw' else 'Reward'
-                
-                # * POST-PROCESSING eval metrics for some envs
-                if task == 'pygame-flappybird':
-                    # flappy bird: measure in # holes passed => offset terminating reward of -5
-                    df_eval[metric] = df_eval[metric] + 5
 
                 grouped_data = df_eval.groupby('Timestep').agg(
                         avg_metric=(metric, 'mean'),
@@ -446,12 +435,8 @@ def plot_time_performance(cfg: dict):
                                 color=color, alpha=0.1)
             
             # scale of total return/reward metric for different environments
-            if task in TASK_SET['dmcontrol']:
-                yticks = [n for n in np.arange(0,1100,100)]  
-            elif task[:2] == 'mw': 
+            if task[:2] == 'mw': 
                 yticks = [n for n in np.arange(0,1.2,0.2)]
-            elif task == 'pygame-flappybird':
-                yticks = [n for n in np.arange(0,30,5)]
             elif task[:3] == 'pde':
                 y_low = grouped_data['lower_ci'].clip(vmin,vmax).min()
                 y_high = 0.0 # for PDE ControlGym envs, max reward is 0. (no error)
