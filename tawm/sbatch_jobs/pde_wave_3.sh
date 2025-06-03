@@ -8,7 +8,7 @@
 #SBATCH --qos=huge-long
 
 source activate tdmpc2
-cd ~/world_models_diff_envs/tdmpc2/tdmpc2
+cd /fs/nexus-scratch/anhu/tawm/tawm
 
 # # 1) baseline model: non-time-aware model
 # python train.py task=pde-wave multi_dt=false checkpoint=/fs/nexus-scratch/anhu/world-model-checkpoints steps=1500100 save_video=false seed=3
