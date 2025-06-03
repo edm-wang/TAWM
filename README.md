@@ -7,10 +7,10 @@ To incorporate **TAWM** into any world model architecture:
 
 1. **Modify the dynamics or temporal state-space model to condition on the time step** $\Delta t$  
    Example (Euler integration model):  
-   $$ z_{t+\Delta t} = z_t + d_{\theta}(z_t, a_t, \Delta t) \cdot \tau(\Delta t) $$
+   $$z_{t+\Delta t} = z_t + d_{\theta}(z_t, a_t, \Delta t) \cdot \tau(\Delta t)$$
 
 2. **Train using a mixture of time step sizes:**  
-   $$ \Delta t \sim \text{Log-Uniform}(\Delta t_{\min}, \Delta t_{\max}) \quad \text{(or Uniform sampling)} $$
+   $$\Delta t \sim \text{Log-Uniform}(\Delta t_{\min}, \Delta t_{\max}) \quad \text{(or Uniform sampling)}$$
 
 
 <h1> 1. Dependencies Installations </h1>
