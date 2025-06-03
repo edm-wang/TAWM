@@ -3,11 +3,14 @@ This is the code for Time-Aware World Model (TAWM), a model-agnostic and more ef
 
 Since TAWM's core contribution is the time-aware training method, which is architecture-agnostic, it can be incorporated into any world model training pipeline, including but is not limited to TD-MPC2 and Dreamers. <br><br>
 
-To incorporate TAWM into any world model architecture, you can simply:
-1) Modify the dynamics / temporal state space model condition on time step $\Delta t$ <br>
-   E.g. $z_{t+\Delta t} = z_t + d_{\theta}(z_t, a_t, \Delta t) \cdot \tau(\Delta t)$ (Euler dynamic model)
-2) Use mixture of time step size during training: <br>
-   $\Delta t$ ~ Log-Uniform($\Delta t_{min}, \Delta t_{max}$) (or Uniform)
+To incorporate **TAWM** into any world model architecture:
+
+1. **Modify the dynamics or temporal state-space model to condition on the time step** $\Delta t$  
+   Example (Euler integration model):  
+   $$ z_{t+\Delta t} = z_t + d_{\theta}(z_t, a_t, \Delta t) \cdot \tau(\Delta t) $$
+
+2. **Train using a mixture of time step sizes:**  
+   $$ \Delta t \sim \text{Log-Uniform}(\Delta t_{\min}, \Delta t_{\max}) \quad \text{(or Uniform sampling)} $$
 
 
 <h1> 1. Dependencies Installations </h1>
