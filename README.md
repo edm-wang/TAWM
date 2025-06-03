@@ -71,9 +71,6 @@ To incorporate **TAWM** into any world model architecture:
    ```
 
    ---
-   For the non-time-aware baseline models trained on fixed default $\Delta t$, we used the trained weights of the original TD-MPC2 model for each Meta-World control task.
-   The trained weights are available here: https://huggingface.co/nicklashansen/tdmpc2/tree/main/metaworld.
-
    Baseline Training Examples:
    ```sh
    cd tdmpc2
@@ -139,6 +136,11 @@ The evaluation results are saved in `tdmpc2/logs/<task>/<eval-type>.csv`.
 * `task`: the control task evaluated on
 * `eval_type`: evaluated model type (e.g. baseline, TAWM-RK4, TAWM-Euler, etc.)
 
+---
+* **NOTE 1**: for the non-time-aware baseline models trained on fixed default $\Delta t$, we used the trained weights of the original TD-MPC2 model for each Meta-World control task.
+The trained weights are available here: https://huggingface.co/nicklashansen/tdmpc2/tree/main/metaworld. <br>
+* **NOTE 2**: The learning curves of the non-time-aware baseline models evaluated at the default $\Delta t$ are taken from the original TD-MPC2 model, whose learning curves (at default $\Delta t$) are publicly available at: https://github.com/nicklashansen/tdmpc2/tree/main/results/tdmpc2.
+
 <h1> (Optional) Experiments with MTS3 </h1>
 The original MTS3 is prediction-only world model and does not support evaluation on control tasks. If you are interested in experimenting with MTS3 as a comparison to our TAWM, please use our modified MTS3+MPC for comparison on control tasks. 
 
@@ -162,9 +164,11 @@ The original MTS3 is prediction-only world model and does not support evaluation
    * access config file in `MTS3/experiments/basketball/conf/model/default_mts3.yaml`
    * set `time_scale_multiplier = <H>`
 
-4. **Example Training MTS3** for `mw-basketball`:
-   * go to `MTS3`
-   * `python MTS3/experiments/basketball/mts3_exp.py`
+4. **Example Training MTS3** for `mw-basketball` (assuming you have collected offline dataset for the task):
+   ```
+   cd MTS3
+   python MTS3/experiments/basketball/mts3_exp.py
+   ```
    
 
    <!-- It is very likely that when running the training process with adaptive timesteps, you will get an error like this:
