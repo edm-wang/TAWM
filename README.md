@@ -70,7 +70,11 @@ To incorporate **TAWM** into any world model architecture:
    python train.py task=pde-burgers save_video=false multi_dt=true steps=1500000 seed=5
    ```
 
-   Baseline Training Example: **train baseline model** on `Meta-World basketball`:
+   ---
+   For the non-time-aware baseline models trained on fixed default $\Delta t$, we used the trained weights of the original TD-MPC2 model for each Meta-World control task.
+   The trained weights are available here: https://huggingface.co/nicklashansen/tdmpc2/tree/main/metaworld.
+
+   Baseline Training Examples:
    ```sh
    cd tdmpc2
    # baseline: meta-world environments
