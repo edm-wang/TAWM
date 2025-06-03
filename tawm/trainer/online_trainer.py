@@ -275,29 +275,6 @@ class OnlineTrainer(Trainer):
                                 self.dt = np.random.uniform(low=np.log(0.001), high=np.log(0.05)) # Log sampling; Max dt = 50ms
                             self.dt = round(float(np.exp(self.dt)), 4)
                         # ==========================================================
-                    elif self.cfg.task[:7] == 'sustain':
-                        """ 
-                            SustainGym observation delta t
-                            -> unlike other envs where dt \in [1,50]ms, SustainGym envs has dt \in [1,50] MINUTES
-                        """
-                        if self.cfg.dt_sampler == 'uniform':
-                            # uniform sampling
-                            self.dt = round(np.random.uniform(low=1, high=50), 4) # Uniform sampling; Max dt = 50 minutes
-                        elif self.cfg.dt_sampler == 'log-uniform':
-                            self.dt = np.random.uniform(low=np.log(1), high=np.log(50)) # Log sampling; Max dt = 50 minutes
-                            self.dt = round(float(np.exp(self.dt)), 2)
-                        # ==========================================================
-                    elif self.cfg.task[:6] == 'pygame':
-                        """ 
-                            PyGame observation delta t
-                            -> PyGame envs has dt \in [0.01, 0.2]s (or [5, 100] fps)
-                        """
-                        if self.cfg.dt_sampler == 'uniform':
-                            # uniform sampling
-                            self.dt = round(np.random.uniform(low=0.01, high=0.2), 4) # Uniform sampling; Max dt = 0.5 second (5Hz)
-                        elif self.cfg.dt_sampler == 'log-uniform':
-                            self.dt = np.random.uniform(low=np.log(0.01), high=np.log(0.2)) # Log sampling; Max dt = 0.5 second (5Hz)
-                            self.dt = round(float(np.exp(self.dt)), 4)
                     elif self.cfg.task[:3] == 'pde':
                         """ ControlGym observation rate """
                         _ , task_name = self.cfg.task.split('-', maxsplit=1)
@@ -309,29 +286,6 @@ class OnlineTrainer(Trainer):
                         elif self.cfg.dt_sampler == 'log-uniform':
                             self.dt = np.random.uniform(low=np.log(0.01), high=np.log(max_dt)) # Log sampling; Max dt = 1.0 default
                             self.dt = round(float(np.exp(self.dt)), 4)
-                    elif self.cfg.task[:2] == 'f1':
-                        """ F1Tenth observation rate """
-                        _ , task_name = self.cfg.task.split('-', maxsplit=1)
-                        max_dt = 0.5
-
-                        if self.cfg.dt_sampler == 'uniform':
-                            # uniform sampling
-                            self.dt = round(np.random.uniform(low=0.01, high=max_dt), 4) # Uniform sampling; Max dt = 1.0 default
-                        elif self.cfg.dt_sampler == 'log-uniform':
-                            self.dt = np.random.uniform(low=np.log(0.01), high=np.log(max_dt)) # Log sampling; Max dt = 1.0 default
-                            self.dt = round(float(np.exp(self.dt)), 4)
-                    elif self.cfg.task in TASK_SET['dmcontrol']:
-                        """ 
-                            DMControl observation delta t
-                        """
-                        if self.cfg.dt_sampler == 'uniform':
-                            # uniform sampling
-                            self.dt = round(np.random.uniform(low=0.001, high=2*self.cfg.default_dt), 4) # Uniform sampling; Max dt = 50ms
-                        elif self.cfg.dt_sampler == 'log-uniform':
-                            # log-uniform sampling (updated)
-                            self.dt = np.random.uniform(low=np.log(0.001), high=np.log(2*self.cfg.default_dt))
-                            self.dt = round(float(np.exp(self.dt)), 4)
-                        # ==========================================================
                     else:
                         raise NotImplementedError
                     
