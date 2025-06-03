@@ -14,7 +14,6 @@ from common.seed import set_seed
 from common.buffer import Buffer
 from envs import make_env
 from tdmpc2 import TDMPC2
-from trainer.offline_trainer import OfflineTrainer
 from trainer.online_trainer import OnlineTrainer
 from common.logger import Logger
 from common import TASK_SET
@@ -49,7 +48,7 @@ def train(cfg: dict):
     print(colored('Work dir:', 'yellow', attrs=['bold']), cfg.work_dir)
     
     """ Specify Trainer to train model given model architecture & environment"""
-    trainer_cls = OfflineTrainer if cfg.multitask else OnlineTrainer
+    trainer_cls = OnlineTrainer
     env = make_env(cfg)
         
     if not cfg.multitask:

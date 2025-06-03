@@ -92,7 +92,7 @@ seed: 1
 # convenience
 work_dir: ???
 task_title: ???
-multitask: false
+multitask: false # should always be false; multitask TAWM is for future works
 tasks: ???
 obs_shape: ???
 action_dim: ???
