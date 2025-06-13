@@ -15,9 +15,9 @@
 ## Introduction
 This is the code for Time-Aware World Model (TAWM), a model-agnostic and more efficient training method for world model. In this work, TAWM is built on top of TD-MPC2 world model architecture as the basis of the experiments. <br><br>
 
-Since TAWM's core contribution is the time-aware training method, which is architecture-agnostic, it can be incorporated into any world model training pipeline, including but is not limited to TD-MPC2 and Dreamers. <br><br>
+Since TAWM's core contribution is the time-aware training method, which is ***architecture-agnostic***, it can be incorporated into any world model training pipeline, including but is not limited to TD-MPC2 and Dreamers. <br><br>
 
-To incorporate **TAWM** into any world model architecture:
+You can directly incorporate the Time-Aware concept into your world model training pipeline ***even without using our code***. To incorporate **TAWM** into any world model architecture:
 
 1. **Modify the dynamics or temporal state-space model to condition on the time step** $\Delta t$  
    Example (Euler integration model):  
