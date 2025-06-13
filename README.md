@@ -183,6 +183,26 @@ The original MTS3 is prediction-only world model and does not support evaluation
    cd MTS3
    python MTS3/experiments/basketball/mts3_exp.py
    ```
+
+## Contact
+If you have any question or suggestion about our work, please feel free to open an issue or contact us at anhu@umd.edu.
+
+## Citation
+If you find the insights and findings in our work useful, please consider citing our paper with the following BibTeX entry.
+
+```BibTeX
+@misc{nhu2025timeawareworldmodeladaptive,
+      title={Time-Aware World Model for Adaptive Prediction and Control}, 
+      author={Anh N. Nhu and Sanghyun Son and Ming Lin},
+      year={2025},
+      eprint={2506.08441},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2506.08441}, 
+}
+```
+
+The official proceeding BibTeX will updated once avaialble. We appreciate your interest in our work and hope that it is useful to your projects!
    
 
    <!-- It is very likely that when running the training process with adaptive timesteps, you will get an error like this:
