@@ -1,6 +1,6 @@
 <p align="center">
    <h1 align="center">Time-Aware World Model</h1>
-   <h3 align="center">[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2506.08441) | 
+   <h3 align="center"><a href="https://arxiv.org/abs/2506.08441">Paper</a> | 
    <a href="">Poster</a> (to be updated) | 
    <a href="">Videos</a> (to be updated) </h3>
 </p>
