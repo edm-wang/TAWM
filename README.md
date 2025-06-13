@@ -1,4 +1,18 @@
-<h1> Introduction </h1>
+<p align="center">
+   <h1 align="center">Time-Aware World Model</h1>
+   <h3 align="center">[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2506.08441) | 
+   <a href="">Poster</a> (to be updated) | 
+   <a href="">Videos</a> (to be updated) </h3>
+</p>
+
+> [**Time-Aware World Model for Adaptive Prediction and Control**](https://arxiv.org/abs/2506.08441)  <br>
+> [Anh N. Nhu](https://openreview.net/profile?id=%7EAnh_N_Nhu2/)<sup>\*, 1</sup>, [Sanghyun Son](https://sanghyun.phd.sh/)<sup>\*, 1</sup>, [Ming C. Lin](https://www.cs.umd.edu/~lin/)<sup>1</sup>  <br>
+> <sup>1</sup> University of Maryland, College Park
+> <br>
+> International Conference on Machine Learning (ICML) 2025 <br>
+>
+
+## Introduction
 This is the code for Time-Aware World Model (TAWM), a model-agnostic and more efficient training method for world model. In this work, TAWM is built on top of TD-MPC2 world model architecture as the basis of the experiments. <br><br>
 
 Since TAWM's core contribution is the time-aware training method, which is architecture-agnostic, it can be incorporated into any world model training pipeline, including but is not limited to TD-MPC2 and Dreamers. <br><br>
@@ -13,7 +27,7 @@ To incorporate **TAWM** into any world model architecture:
    $$\Delta t \sim \text{Log-Uniform}(\Delta t_{\min}, \Delta t_{\max}) \quad \text{(or Uniform sampling)}$$
 
 
-<h1> 1. Dependencies Installations </h1>
+## 1. Dependencies Installations
 
 1. Installation:<br>
    **Base Conda env (recommended)**
@@ -54,7 +68,7 @@ To incorporate **TAWM** into any world model architecture:
 
 
 
-<h1> 2. TAWM and baseline training </h1>
+## 2. TAWM and baseline training
 
 1. Activate conda env
    ```sh
@@ -100,9 +114,9 @@ To incorporate **TAWM** into any world model architecture:
    python eval_model_multidt.py task=mw-faucet-open multitask=false checkpoint=<path to .pt file> mpc=false
    ``` -->
 
-<h1> 3. Model Evaluation </h1>
+## 3. Model Evaluation
 
-<h2> 3a. Evaluation Scripts </h2>
+<h3> 3a. Evaluation Scripts </h3>
 The evaluation scripts are provided as reference script for TAWM experiment/deployments. <br>
 
 The evaluation code evalutate the performance of the world model on specified task with different simulation time steps. For `meta-world` environment, it also provides success rate for the task (success rate ranges from 0.0 to 1.0). <br>
@@ -130,7 +144,7 @@ The evaluation code evalutate the performance of the world model on specified ta
    * **NOTE: You need to have model saved at each step for this evaluation.** By default, a model checkpoint is saved every 50,000 steps.
 <br>
 
-<h2> 3b. Evaluation Results </h2>
+<h3> 3b. Evaluation Results </h3>
 
 The evaluation results are saved in `tdmpc2/logs/<task>/<eval-type>.csv`.
 * `task`: the control task evaluated on
@@ -141,7 +155,7 @@ The evaluation results are saved in `tdmpc2/logs/<task>/<eval-type>.csv`.
 The trained weights are available here: https://huggingface.co/nicklashansen/tdmpc2/tree/main/metaworld. <br>
 * **NOTE 2**: The learning curves of the non-time-aware baseline models evaluated at the default $\Delta t$ are taken from the original TD-MPC2 model, whose learning curves (at default $\Delta t$) are publicly available at: https://github.com/nicklashansen/tdmpc2/tree/main/results/tdmpc2.
 
-<h1> (Optional) Experiments with MTS3 </h1>
+## (Optional) Experiments with MTS3
 The original MTS3 is prediction-only world model and does not support evaluation on control tasks. If you are interested in experimenting with MTS3 as a comparison to our TAWM, please use our modified MTS3+MPC for comparison on control tasks. 
 
 1. **Offline data collection** <br>
