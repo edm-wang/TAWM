@@ -24,12 +24,14 @@ from datetime import datetime
 from tqdm import tqdm
 import time
 from collections import defaultdict
+from PIL import Image
 
 cwd = os.path.dirname(__file__)
 if not os.path.exists(cwd):
     raise Exception(f'{cwd} does not exist!')
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 env = None
+save_video = True # set this only if you want to save evaluation visualizations
 
 """
     Test model performance on various inference-time observation rates
@@ -54,6 +56,8 @@ env = None
 
 @hydra.main(config_name='config', config_path='.', version_base='1.3')
 def eval(cfg: dict):
+    global save_video
+
     print(colored('Task:', 'green', attrs=['bold']), cfg.task, 
           colored('Seed:', 'green', attrs=['bold']), cfg.seed)
     if cfg.multi_dt:
@@ -61,6 +65,10 @@ def eval(cfg: dict):
     else:
         print(colored('Adjusted Step:', 'green', attrs=['bold']), cfg.eval_steps_adjusted)
     print(colored('Planning Horizon:', 'green', attrs=['bold']), cfg.horizon)
+
+    if cfg.task[:3] == 'pde':
+        save_video = False # PDE Control envs doesnt have rendering
+    print(colored('save_video: ' + str(save_video), 'green'))
     
     # env parameters
     global env
@@ -133,11 +141,16 @@ def eval(cfg: dict):
         """ 3. collect episode rewards"""
         ep_rewards[dt] = []
         ep_successes[dt] = []
+        frames = []
         for episode in tqdm(range(cfg.eval_episodes), desc='Eval episodes', position=0):
             obs, ep_reward, done, t = env.reset(), 0, False, -1
 
             while not done:
                 t += 1
+
+                # """ 0. video rendering"""
+                if (episode == 0) and save_video:
+                    frames.append(env.render())
                 # """ 1. take action """
                 start = time.time()
                 action = tdmpc2.act(obs, t0=t==0, eval_mode=True, timestep=dt)
@@ -158,6 +171,12 @@ def eval(cfg: dict):
             rows.append({'Timestep': dt, 
                         'Reward': float(ep_reward.detach().cpu().numpy()), 
                         'Success': info['success']})
+        
+            # **********************************************************
+            #   save video rendering: auto define video name from cfg
+            # **********************************************************
+            if (episode == 0) and save_video:
+                save_video_func(frames, eval_dt=dt, cfg=cfg)
 
         print(f'\tAvg reward on env dt={dt}:', np.array(ep_rewards[dt]).mean())
         if cfg.task[:2] == 'mw':
@@ -184,14 +203,44 @@ def eval(cfg: dict):
             else:
                 save_file = f'eval_multidt_timeaware_{cfg.integrator}_{cfg.seed}.csv'
         else:
-            if cfg.integrator == 'rk4': # default
-                save_file = f'eval_multidt_timeaware_{cfg.dt_sampler}_{cfg.seed}.csv'
-            else:
-                save_file = f'eval_multidt_timeaware_{cfg.dt_sampler}_{cfg.integrator}_{cfg.seed}.csv'
+            save_file = f'eval_multidt_timeaware_{cfg.dt_sampler}_{cfg.integrator}_{cfg.seed}.csv'
         
     # Save evals 
     df_eval = pd.DataFrame(rows)
     df_eval.to_csv(f'{cwd}/logs/{cfg.task}/{save_file}', index=False)
+
+
+def save_video_func(frames, eval_dt: float, cfg: dict):
+    # Save demo video
+    fps = 15 * (cfg.default_dt / eval_dt) # smaller dt => more frame => adjust higher fps
+    # fps = int(fps)
+    video_path = None
+    task = cfg.task
+
+    ########################
+    ### save_video_path  ###
+    ########################
+    os.system(f'mkdir -p logs/{task}/eval_dt={eval_dt}')
+    if cfg.multi_dt:
+        # time-aware model
+        video_path = f'logs/{task}/eval_dt={eval_dt}/tawm_{cfg.dt_sampler}_{cfg.integrator}_{cfg.seed}.gif'
+    else:
+        # base model
+        # train_dt: fixed dt base model is trained on (by default, train_dt = default_dt)
+        train_dt = cfg.train_dt if (cfg.train_dt is not None) else cfg.default_dt
+        cfg.train_dt = cfg.train_dt if (cfg.train_dt is not None) else cfg.default_dt
+        video_path = f'logs/{task}/eval_dt={eval_dt}/baseline_traindt={cfg.train_dt}_{cfg.seed}.gif'
+
+    # save frames to mp4 video
+    print(colored(f'Saving {len(frames)} frames to {video_path}.', 'green', attrs=['bold']))
+    duration = 1000/fps
+    frames = [Image.fromarray(img) for img in frames]
+    frames[0].save(video_path, save_all=True, append_images=frames[1:], duration=duration, loop=0)
+    # # address issue with duration not correct
+    # vid = Image.open(video_path)
+    # vid.info['duration'] = duration
+    # vid.save(video_path, save_all=True)
+
 
 if __name__ == '__main__':
     start = datetime.now()
