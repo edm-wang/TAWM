@@ -66,7 +66,11 @@ You can directly incorporate the Time-Aware concept into your world model traini
    * comment out line 38: `# warnings.warn(warning, stacklevel=2)`
    
 
+## Additional To-Do List
 
+- [ ] Potential additional experiments on F16 aircraft controls: https://github.com/GongXudong/fly-craft
+- [ ] Installation guide for F16 control environments
+- [ ] Implementation guide for F16 control environments
 
 ## 2. TAWM and baseline training
 
