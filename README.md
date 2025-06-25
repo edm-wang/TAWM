@@ -54,6 +54,14 @@ You can directly incorporate the Time-Aware concept into your world model traini
    rm -r controlgym/.git/
    ```
 
+   **Additional dependecies for F16 aircraft control tasks** (work in progress):
+   ```sh
+   # source: https://github.com/GongXudong/fly-craft/
+   pip install flycraft
+   cd tawm/tawm/envs
+   git clone https://github.com/GongXudong/fly-craft-examples.git
+   ```
+
    ---
    <b> IMPORTANT NOTE </b>: <br>
    If for some reasons, `import controlgym` causes the following warning to TERMINATE the program (which it shouldn't):
@@ -86,6 +94,8 @@ You can directly incorporate the Time-Aware concept into your world model traini
    python train.py task=mw-basketball multi_dt=true steps=1500000 seed=3
    # TAWM: pde-control environments: no rendering/video
    python train.py task=pde-burgers save_video=false multi_dt=true steps=1500000 seed=5
+
+   python train.py task=f16 save_video=false multi_dt=true steps=6000000 eval_freq=100000 lr=1e-3 seed=3
    ```
 
    ---
@@ -195,14 +205,13 @@ If you have any question or suggestion about our work, please feel free to open 
 If you find the insights and findings in our work useful, please consider citing our paper with the following BibTeX entry.
 
 ```BibTeX
-@misc{nhu2025timeawareworldmodeladaptive,
-      title={Time-Aware World Model for Adaptive Prediction and Control}, 
-      author={Anh N. Nhu and Sanghyun Son and Ming Lin},
-      year={2025},
-      eprint={2506.08441},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2506.08441}, 
+@inproceedings{
+   nhu2025timeaware,
+   title={Time-Aware World Model for Adaptive Prediction and Control},
+   author={Anh N Nhu and Sanghyun Son and Ming Lin},
+   booktitle={Forty-second International Conference on Machine Learning},
+   year={2025},
+   url={https://openreview.net/forum?id=gZ5N3TLjwv}
 }
 ```
 
