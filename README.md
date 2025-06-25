@@ -215,7 +215,7 @@ If you find the insights and findings in our work useful, please consider citing
 }
 ```
 
-The official proceeding BibTeX will updated once avaialble. We appreciate your interest in our work and hope that it is useful to your projects!
+We appreciate your interest in our work and hope that it is useful to your projects!
    
 
    <!-- It is very likely that when running the training process with adaptive timesteps, you will get an error like this:
