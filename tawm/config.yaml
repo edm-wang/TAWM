@@ -79,7 +79,7 @@ simnorm_dim: 8
 
 # logging
 wandb_project: tawm
-wandb_entity: anh_nn01
+wandb_entity: mredmondwang
 wandb_silent: false
 disable_wandb: false
 save_csv: true
