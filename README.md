@@ -49,7 +49,7 @@ You can directly incorporate the Time-Aware concept into your world model traini
    pip3 install gymnasium
 
    # install controlgym envs (PDE)
-   cd tdmpc2/envs
+   cd tawm/envs
    git clone https://github.com/xiangyuan-zhang/controlgym.git
    rm -r controlgym/.git/
    ```
@@ -68,9 +68,9 @@ You can directly incorporate the Time-Aware concept into your world model traini
    `UserWarning: We've integrated functorch into PyTorch. As the final step of the integration, functorch.combine_state_for_ensemble is deprecated as of PyTorch 2.0 and will be deleted in a future version of PyTorch >= 2.3.` <br>
    <b> Normally, the warning MUST NOT TERMINATE the program (just a warning) </b> <br><br>
    The following fix works for us:
-   * see the error log like this: `~/miniconda3/envs/tdmpc2/lib/python3.9/site-packages/torch/_functorch/deprecated.py:38, in warn_deprecated(api, new_api)` on your machine / environment
+   * see the error log like this: `~/miniconda3/envs/tawm/lib/python3.9/site-packages/torch/_functorch/deprecated.py:38, in warn_deprecated(api, new_api)` on your machine / environment
    * execute `vim <path to _functorch/deprecated.py>` <br>
-      in our case, it was `vim ~/miniconda3/envs/tdmpc2/lib/python3.9/site-packages/torch/_functorch/deprecated.py`
+      in our case, it was `vim ~/miniconda3/envs/tawm/lib/python3.9/site-packages/torch/_functorch/deprecated.py`
    * comment out line 38: `# warnings.warn(warning, stacklevel=2)`
    
 
@@ -89,7 +89,7 @@ You can directly incorporate the Time-Aware concept into your world model traini
 
 2. TAWM Training Examples:
    ```sh
-   cd tdmpc2
+   cd tawm
    # TAWM: meta-world environments
    python train.py task=mw-basketball multi_dt=true steps=1500000 seed=3
    # TAWM: pde-control environments: no rendering/video
@@ -101,7 +101,7 @@ You can directly incorporate the Time-Aware concept into your world model traini
    ---
    Baseline Training Examples:
    ```sh
-   cd tdmpc2
+   cd tawm
    # baseline: meta-world environments
    python train.py task=mw-basketball multi_dt=false steps=2000000 seed=3
    # baseline: pde-control environments: no rendering/video
@@ -160,13 +160,13 @@ The evaluation code evalutate the performance of the world model on specified ta
 
 <h3> 3b. Evaluation Results </h3>
 
-The evaluation results are saved in `tdmpc2/logs/<task>/<eval-type>.csv`.
+The evaluation results are saved in `tawm/logs/<task>/<eval-type>.csv`.
 * `task`: the control task evaluated on
 * `eval_type`: evaluated model type (e.g. baseline, TAWM-RK4, TAWM-Euler, etc.)
 
 ---
 * **NOTE 1**: for the non-time-aware baseline models trained on fixed default $\Delta t$, we used the trained weights of the original TD-MPC2 model for each Meta-World control task.
-The trained weights are available here: https://huggingface.co/nicklashansen/tdmpc2/tree/main/metaworld. <br>
+The trained weights are available here: https://huggingface.co/nicklashansen/tawm/tree/main/metaworld. <br>
 * **NOTE 2**: The learning curves of the non-time-aware baseline models evaluated at the default $\Delta t$ are taken from the original TD-MPC2 model, whose learning curves (at default $\Delta t$) are publicly available at: https://github.com/nicklashansen/tdmpc2/tree/main/results/tdmpc2.
 
 ## (Optional) Experiments with MTS3
@@ -184,7 +184,7 @@ The original MTS3 is prediction-only world model and does not support evaluation
 
    b. Collect data for **baseline world model**:
    ```sh
-   cd tdmpc2/tdmpc2
+   cd tawm/tawm
    python collect_offline_dataset.py task_set=mt9 specific_task=mw-basketball num_eps=40000 ep_length=100 multitask=false multi_dt=false data_dir=/fs/nexus-scratch/anhu/mt9_singledt_40k
    ```
 
