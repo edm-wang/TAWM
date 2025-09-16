@@ -6,6 +6,9 @@ import sys
 import warnings
 warnings.filterwarnings('ignore')
 
+# Add the tawm package root to Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 import torch
 import torch.nn.functional as F
 from torch.autograd.functional import jacobian as torch_jacobian
@@ -26,9 +29,10 @@ import time
 from collections import defaultdict
 from PIL import Image
 
-cwd = os.path.dirname(__file__)
-if not os.path.exists(cwd):
-    raise Exception(f'{cwd} does not exist!')
+# Resolve TAWM package root (two levels above this file: tawm/eval/old/ -> tawm)
+tawm_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if not os.path.exists(tawm_root):
+    raise Exception(f'{tawm_root} does not exist!')
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 env = None
 save_video = True # set this only if you want to save evaluation visualizations
@@ -54,7 +58,7 @@ save_video = True # set this only if you want to save evaluation visualizations
             -> adjusted steps: `logs/{task}/eval_multidt_baseline_{traindt}_adjusted_{seed}.csv`
 """
 
-@hydra.main(config_name='config', config_path='.', version_base='1.3')
+@hydra.main(config_name='config', config_path='../..', version_base='1.3')
 def eval(cfg: dict):
     global save_video
 
@@ -207,7 +211,9 @@ def eval(cfg: dict):
         
     # Save evals 
     df_eval = pd.DataFrame(rows)
-    df_eval.to_csv(f'{cwd}/logs/{cfg.task}/{save_file}', index=False)
+    logs_dir = os.path.join(tawm_root, 'logs', f'{cfg.task}')
+    os.makedirs(logs_dir, exist_ok=True)
+    df_eval.to_csv(os.path.join(logs_dir, f'{save_file}'), index=False)
 
 
 def save_video_func(frames, eval_dt: float, cfg: dict):
@@ -220,16 +226,17 @@ def save_video_func(frames, eval_dt: float, cfg: dict):
     ########################
     ### save_video_path  ###
     ########################
-    os.system(f'mkdir -p logs/{task}/eval_dt={eval_dt}')
+    logs_task_dt_dir = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')), 'logs', task, f'eval_dt={eval_dt}')
+    os.makedirs(logs_task_dt_dir, exist_ok=True)
     if cfg.multi_dt:
         # time-aware model
-        video_path = f'logs/{task}/eval_dt={eval_dt}/tawm_{cfg.dt_sampler}_{cfg.integrator}_{cfg.seed}.gif'
+        video_path = os.path.join(logs_task_dt_dir, f'tawm_{cfg.dt_sampler}_{cfg.integrator}_{cfg.seed}.gif')
     else:
         # base model
         # train_dt: fixed dt base model is trained on (by default, train_dt = default_dt)
         train_dt = cfg.train_dt if (cfg.train_dt is not None) else cfg.default_dt
         cfg.train_dt = cfg.train_dt if (cfg.train_dt is not None) else cfg.default_dt
-        video_path = f'logs/{task}/eval_dt={eval_dt}/baseline_traindt={cfg.train_dt}_{cfg.seed}.gif'
+        video_path = os.path.join(logs_task_dt_dir, f'baseline_traindt={cfg.train_dt}_{cfg.seed}.gif')
 
     # save frames to mp4 video
     print(colored(f'Saving {len(frames)} frames to {video_path}.', 'green', attrs=['bold']))
