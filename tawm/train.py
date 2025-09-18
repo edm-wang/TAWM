@@ -60,6 +60,9 @@ def train(cfg: dict):
             elif cfg.task[:3] == 'pde':
                 print('Using ControlGym Environment')
                 cfg.default_dt = round(env.get_sim_dt(), 4)
+            elif cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
+                print('Using ManiSkill2 Environment')
+                cfg.default_dt = env.get_sim_dt()
             else:
                 raise NotImplementedError(f'{cfg.task} is not implemented!')
 
@@ -71,6 +74,8 @@ def train(cfg: dict):
             elif cfg.task[:3] == 'pde':
                 max_dt = 1.0
                 print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([0.01, {max_dt}] sec)') # Max dt = 1.0 sec
+            elif cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
+                print(colored('OBSERVATION TIMESTEP:', 'green', attrs=['bold']), f'{cfg.dt_sampler}([0.001, 0.05] sec)') # Max dt = 0.05 sec for ManiSkill2
             else:
                 raise NotImplementedError
 

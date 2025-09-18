@@ -58,6 +58,9 @@ class OnlineTrainer(Trainer):
             elif self.cfg.task[:3] == 'pde':
                 _ , task = self.cfg.task.split('-', maxsplit=1)
                 self.env.set_sim_dt(dt)
+            # ManiSkill2 envs
+            elif self.cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
+                self.env.obs_dt = dt
             else: 
                 raise ValueError(f'{self.cfg.task} is not defined.')
 
@@ -71,6 +74,9 @@ class OnlineTrainer(Trainer):
         # ControlGym envs (PDE control)
         elif self.cfg.task[:3] == 'pde':
             return self.env.get_sim_dt()
+        # ManiSkill2 envs
+        elif self.cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
+            return self.env.obs_dt
         else: 
             raise ValueError(f'{self.cfg.task} is not defined.')
 
@@ -90,6 +96,9 @@ class OnlineTrainer(Trainer):
             return self.env.step_adaptive_dt(action, dt)
         # ControlGym envs
         elif self.cfg.task[:3] == 'pde':
+            return self.env.step_adaptive_dt(action, dt)
+        # ManiSkill2 envs
+        elif self.cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
             return self.env.step_adaptive_dt(action, dt)
         else:
             raise ValueError(f'{self.cfg.task} is not defined.')
@@ -286,6 +295,20 @@ class OnlineTrainer(Trainer):
                         elif self.cfg.dt_sampler == 'log-uniform':
                             self.dt = np.random.uniform(low=np.log(0.01), high=np.log(max_dt)) # Log sampling; Max dt = 1.0 default
                             self.dt = round(float(np.exp(self.dt)), 4)
+                    elif self.cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
+                        """ ManiSkill2 observation delta t """
+                        if self.cfg.dt_sampler == 'uniform':
+                            # uniform sampling
+                            self.dt = round(np.random.uniform(low=0.001, high=0.05), 4) # Uniform sampling; Max dt = 50ms
+                        elif self.cfg.dt_sampler == 'log-uniform':
+                            # log-uniform sampling (updated)
+                            if self._step < 100000: # max dt = 20ms
+                                self.dt = np.random.uniform(low=np.log(0.001), high=np.log(0.02)) # Log sampling; Max dt = 20ms
+                            elif self._step < 200000: # max dt = 30ms
+                                self.dt = np.random.uniform(low=np.log(0.001), high=np.log(0.03)) # Log sampling; Max dt = 30ms
+                            else:   # max dt = 50ms
+                                self.dt = np.random.uniform(low=np.log(0.001), high=np.log(0.05)) # Log sampling; Max dt = 50ms
+                            self.dt = round(float(np.exp(self.dt)), 4)
                     else:
                         raise NotImplementedError
                     
@@ -308,6 +331,9 @@ class OnlineTrainer(Trainer):
                         # specific to Meta-World envs
                         self.env.env._max_episode_steps = self.cfg.episode_length * n # env -> TimeLimit() wrapper -> _max_episode_steps
                         self.env.max_episode_steps = self.cfg.episode_length * n      # env -> max_episode_steps
+                    elif self.cfg.task in ['lift-cube', 'pick-cube', 'stack-cube', 'pick-ycb', 'turn-faucet']:
+                        # specific to ManiSkill2 envs
+                        self.env.max_episode_steps = self.cfg.episode_length * n
                     else:
                         # specific to dmcontrol envs
                         self.env.max_episode_steps = self.cfg.episode_length * n
